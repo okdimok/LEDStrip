@@ -7,6 +7,7 @@
     <script type="text/javascript" src="ws2812.js"></script>
     <script type="text/javascript" src="arduino_funcs.js"></script>
     <script type="text/javascript" src="color_wave.js"></script>
+    <script type="text/javascript" src="color_wave_long_hue.js"></script>
     <script type="text/javascript" src="water_torture.js"></script>
     <script type="text/javascript" src="chasers.js"></script>
     <script type="text/javascript" src="larson.js"></script>
@@ -20,9 +21,9 @@
 
     $(document).ready(function(){
       var container = $('.ledstrip')[0];
-      var light_count = 30;
+      var light_count = 60;
       strip = LEDstrip(container, light_count);
-      driver = new ColorWave(strip);
+      driver = new ColorWaveLongHue(strip);
       driver.init();
       animation = driver.animate.bind(driver)();
 
@@ -32,7 +33,7 @@
 
       $('#animselect').change(function(e) {
         var newanim = $(e.target).val();
-        console.log('change! ' + newanim); 
+        console.log('change! ' + newanim);
         animation = cancelAnimationFrame(animation);
         switch(newanim) {
           case 'torture':
@@ -40,6 +41,9 @@
             break;
           case 'wave':
             driver = new ColorWave(strip);
+            break;
+          case 'wave_hue':
+            driver = new ColorWaveLongHue(strip);
             break;
           case 'chasers':
             driver = new Chasers(strip);
@@ -63,11 +67,11 @@
             driver = new Eyeblinks(strip);
             break;
       /*
-          case 'cycle': 
+          case 'cycle':
             cycle.color_cycle();
             console.log('torture ' + animation);
             break;
-          case 'flares':        
+          case 'flares':
             driver = new flare();
             break;
       */
@@ -85,7 +89,7 @@
 <body>
        <header>
          <h1>LED Strip Simulator</h1>
-         <p>A software simulation of individually addressable RGB LED strips 
+         <p>A software simulation of individually addressable RGB LED strips
          (WS2811/WS2812), often used with Arduino.</p>
        </header>
        <article>
@@ -94,6 +98,7 @@
          <form>
            <select id="animselect">
              <option value="wave">Color Wave</option>
+             <option value="wave_hue">Color Wave Long Hue</option>
              <option value="torture">Water Torture</option>
              <option value="chasers">Chasers</option>
              <option value="larson">Larson Scanner</option>
@@ -102,8 +107,8 @@
              <option value="twinklesparkle">TwinkleSparkle</option>
              <option value="fire">Fire</option>
              <option value="eyeblink">Eyeblink</option>
-             <!-- <option value="cycle">Color Cycle</option> -->
-             <!-- option value="flares">Flares</option -->
+             <option value="cycle">Color Cycle</option>
+             <option value="flares">Flares</option>
              <option value="stop">Stop</option>
            </select>
            <input type="checkbox" id="diffuser" value="0" /> <label for="diffuser">Diffuser</label>
